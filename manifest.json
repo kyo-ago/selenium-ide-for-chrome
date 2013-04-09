@@ -1,18 +1,18 @@
 {
 	"name": "SeleniumIDE for Chrome",
-	"description": "SeleniumIDEのChrome移植版",
+	"description": "SeleniumIDE for Chrome",
 	"manifest_version": 2,
 	"version": "0.1",
 	"browser_action": {
-		"default_title" : "start",
-		"default_icon": "/src/popup/icon128.png",
-		"default_popup": "/src/popup/index.html"
+		"default_title" : "SeleniumIDE",
+		"default_icon": "/img/icon128.png",
+		"default_popup": "/html/popup.html"
 	},
 	"permissions": [
 		"http://localhost:9515/",
 		"tabs"
 	],
 	"icons": {
-		"48": "/src/icon48.png"
+		"48": "/img/icon48.png"
 	}
 }

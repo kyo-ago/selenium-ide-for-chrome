@@ -1,5 +1,4 @@
-debugger;
-chrome.windows.create({
+chrome.windows.create {
 	'url' : '/src/panel/index.html',
 	'type' : 'panel',
 	'focused' : false,
@@ -7,4 +6,4 @@ chrome.windows.create({
 	'left' : 0,
 	'height' : 500,
 	'width' : 300
-});
+}

@@ -1,0 +1,2 @@
+@messagesCtrl = ->
+	1

@@ -1,0 +1,2 @@
+@menuPanelCtrl = ->
+	1

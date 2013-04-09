@@ -1,0 +1,2 @@
+@testCommandCtrl = ->
+	1

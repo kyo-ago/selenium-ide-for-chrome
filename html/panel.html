@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-csp ng-app ng-cloak>
+<head>
+    <meta charset="utf-8">
+    <title>panel</title>
+
+    <link rel="stylesheet" href="/css/angular-ui.min.css">
+    <link rel="stylesheet" href="/css/angular-ui.min.css">
+
+    <script src="/lib/jsdeferred.js"></script>
+    <script src="/lib/lodash.min.js"></script>
+    <script src="/lib/zepto.min.js"></script>
+    <script src="/lib/backbone-min.js"></script>
+
+    <script src="/lib/angular.min.js"></script>
+    <script src="/lib/angular-ui.min.js"></script>
+
+    <script src="/js/panel/ctrl/menuPanel.js"></script>
+    <script src="/js/panel/ctrl/messages.js"></script>
+    <script src="/js/panel/ctrl/testCase.js"></script>
+    <script src="/js/panel/ctrl/testCommand.js"></script>
+    <script src="/js/panel.js"></script>
+</head>
+<body>
+
+<div id="content">
+
+    <div ng-controller="menuPanelCtrl">
+    </div><!-- #menuPanelCtrl -->
+
+    <div ng-controller="testCaseCtrl">
+    </div><!-- #testCaseCtrl -->
+
+    <div ng-controller="testCommandCtrl">
+    </div><!-- #testCommandCtrl -->
+
+    <div ng-controller="messagesCtrl">
+    </div><!-- #messagesCtrl -->
+
+</div><!-- #content -->
+
+</body>
+</html>

@@ -1,0 +1,2 @@
+@testCaseCtrl = ->
+	1
