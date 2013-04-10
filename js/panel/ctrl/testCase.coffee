@@ -1,2 +1,4 @@
+"use strict"
+
 @testCaseCtrl = ->
-	1
+	@

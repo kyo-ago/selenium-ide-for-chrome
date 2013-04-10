@@ -8,6 +8,12 @@
 		"default_icon": "/img/icon128.png",
 		"default_popup": "/html/popup.html"
 	},
+	"content_scripts" : [{
+		"matches": ["<all_urls>"],
+		"js" : [
+			"/js/content_scripts.js"
+		]
+	}],
 	"permissions": [
 		"http://localhost:9515/",
 		"tabs"

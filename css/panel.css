@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
+}
+html, body {
+    height: 100%;
+}
+
+[ng-controller] {
+    border: solid thick black;
+}
+
+[ng-controller="testCaseCtrl"] {
+    float: left;
+    width: 30%;
+}

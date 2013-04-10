@@ -1,2 +1,4 @@
+"use strict"
+
 @messagesCtrl = ->
-	1
+	@

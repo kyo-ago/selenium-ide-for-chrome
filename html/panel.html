@@ -5,15 +5,19 @@
     <title>panel</title>
 
     <link rel="stylesheet" href="/css/angular-ui.min.css">
-    <link rel="stylesheet" href="/css/angular-ui.min.css">
+    <link rel="stylesheet" href="/css/panel.css">
 
     <script src="/lib/jsdeferred.js"></script>
-    <script src="/lib/lodash.min.js"></script>
+    <script src="/lib/underscore.js"></script>
     <script src="/lib/zepto.min.js"></script>
     <script src="/lib/backbone-min.js"></script>
 
-    <script src="/lib/angular.min.js"></script>
+    <script src="/lib/angular.js"></script>
     <script src="/lib/angular-ui.min.js"></script>
+
+    <script src="/js/panel/model/TestComand.js"></script>
+    <script src="/js/panel/model/TestCase.js"></script>
+    <script src="/js/panel/model/TestCases.js"></script>
 
     <script src="/js/panel/ctrl/menuPanel.js"></script>
     <script src="/js/panel/ctrl/messages.js"></script>
@@ -26,15 +30,30 @@
 <div id="content">
 
     <div ng-controller="menuPanelCtrl">
+        <ul>
+            <li><label for="baseURL">Base URL</label><input type="text" id="baseURL"></li>
+            <li><label for="operationSpeed">speed</label><input type="range" id="operationSpeed"></li>
+            <li><button id="executeTestCase">execute test case</button></li>
+            <li><button id="executeTestCommand">execute test command</button></li>
+            <li><label for="recordingOperation">recording</label><input type="checkbox" id="recordingOperation"></li>
+        </ul>
     </div><!-- #menuPanelCtrl -->
 
     <div ng-controller="testCaseCtrl">
+        testCaseCtrl
     </div><!-- #testCaseCtrl -->
 
     <div ng-controller="testCommandCtrl">
+        <table>
+            <tr ng-repeat="command in testCase.toArray()">
+                <td>{{command.get('name')}}</td>
+                <td><a href="#">{{command.get('selector')}}</a></td>
+            </tr>
+        </table>
     </div><!-- #testCommandCtrl -->
 
     <div ng-controller="messagesCtrl">
+        messagesCtrl
     </div><!-- #messagesCtrl -->
 
 </div><!-- #content -->
