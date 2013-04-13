@@ -15,7 +15,7 @@
 		]
 	}],
 	"permissions": [
-		"http://localhost:9515/",
+		"<all_urls>",
 		"tabs"
 	],
 	"icons": {

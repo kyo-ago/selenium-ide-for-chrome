@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="/css/panel.css">
 
     <script src="/lib/jsdeferred.js"></script>
-    <script src="/lib/underscore.js"></script>
+    <script src="/lib/lodash.custom.min.js"></script>
     <script src="/lib/zepto.min.js"></script>
     <script src="/lib/backbone-min.js"></script>
 
-    <script src="/lib/angular.js"></script>
+    <script src="/lib/angular.min.js"></script>
     <script src="/lib/angular-ui.min.js"></script>
+
+    <script src="/js/panel/selenium_ide.js"></script>
 
     <script src="/js/panel/model/TestComand.js"></script>
     <script src="/js/panel/model/TestCase.js"></script>
@@ -31,10 +33,11 @@
 
     <div ng-controller="menuPanelCtrl">
         <ul>
-            <li><label for="baseURL">Base URL</label><input type="text" id="baseURL"></li>
-            <li><label for="operationSpeed">speed</label><input type="range" id="operationSpeed"></li>
-            <li><button id="executeTestCase">execute test case</button></li>
+            <li><label for="baseURL">Base URL</label><input type="text" id="baseURL" ng-model="baseURL"></li>
+            <li><label for="operationSpeed">speed</label><input type="range" id="operationSpeed" min="1" max="5" value="1"></li>
+            <li><button id="executeTestCase" ng-click="executeTestCase()">execute test case</button></li>
             <li><button id="executeTestCommand">execute test command</button></li>
+            <li><button id="quitBrowser" ng-click="quitBrowser()">quit browser</button></li>
             <li><label for="recordingOperation">recording</label><input type="checkbox" id="recordingOperation"></li>
         </ul>
     </div><!-- #menuPanelCtrl -->
@@ -46,8 +49,9 @@
     <div ng-controller="testCommandCtrl">
         <table>
             <tr ng-repeat="command in testCase.toArray()">
-                <td>{{command.get('name')}}</td>
-                <td><a href="#">{{command.get('selector')}}</a></td>
+                <td><select ng-model="command.attributes.name" ng-options="obj.value as obj.text for obj in commandList"></select></td>
+                <td><input type="text" ng-model="command.attributes.selector"></td>
+                <td><input type="text" ng-model="command.attributes.value"></td>
             </tr>
         </table>
     </div><!-- #testCommandCtrl -->

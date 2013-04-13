@@ -3,30 +3,32 @@
   var _this = this;
 
   (function() {
-    var controllers, global, mod, name, _i, _len;
+    "use strict";
+    var global;
 
     global = _this;
-    "use strict";
-    controllers = ['menuPanelCtrl', 'testCaseCtrl', 'testCommandCtrl', 'messagesCtrl'];
-    mod = angular.module('ng');
-    for (_i = 0, _len = controllers.length; _i < _len; _i++) {
-      name = controllers[_i];
-      mod.controller(name, ['$scope', global[name]]);
-    }
-    return _this.addEventListener('DOMContentLoaded', function() {
-      var scopes, _j, _len1;
+    global.scopes = {};
+    global.selenium = new SeleniumIDE();
+    global.selenium.init();
+    return document.addEventListener('DOMContentLoaded', function() {
+      var elem, mod, name, _i, _len, _ref;
 
-      scopes = {};
-      for (_j = 0, _len1 = controllers.length; _j < _len1; _j++) {
-        name = controllers[_j];
-        scopes[name] = angular.element(document.querySelector('[ng-controller="' + name + '"]')).scope();
+      mod = angular.module('ng');
+      _ref = document.querySelectorAll('[ng-controller]');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        elem = _ref[_i];
+        name = elem.getAttribute('ng-controller');
+        mod.controller(name, ['$scope', global[name]]);
+        global.scopes[name] = angular.element(elem).scope();
       }
-      return chrome.extension.onMessage.addListener(function(msg) {
-        if (msg.command !== 'event') {
-          return;
-        }
-        delete msg.command;
-        return scopes['testCommandCtrl'].add(msg);
+      return global.addEventListener('DOMContentLoaded', function() {
+        return chrome.extension.onMessage.addListener(function(msg) {
+          if (msg.command !== 'event') {
+            return;
+          }
+          delete msg.command;
+          return global.scopes['testCommandCtrl'].add(msg);
+        });
       });
     });
   })();

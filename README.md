@@ -8,3 +8,8 @@ selenium-ide-for-chrome
 [http://code.google.com/p/selenium/wiki/ChromeDriver](ChromeDriver - selenium - Information about the Chrome Driver - Browser automation framework - Google Project Hosting)
 
 https://gist.github.com/3853421
+
+https://github.com/kyo-ago/selenium-ide-for-chrome/blob/860b2d4bf93cefacfb2b9983e1a0668ffe1f8459/src/panel/index.js
+
+DevToolsとの連携（条件付きブレークポイント等）
+コードカバレッジとの連携

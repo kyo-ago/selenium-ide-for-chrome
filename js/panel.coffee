@@ -1,20 +1,23 @@
 do =>
-	global = @
 	"use strict"
 
-	controllers = ['menuPanelCtrl', 'testCaseCtrl', 'testCommandCtrl', 'messagesCtrl']
+	global = @
+	global.scopes = {};
 
-	mod = angular.module 'ng'
-	for name in controllers
-		mod.controller name, ['$scope', global[name]]
+	global.selenium = new SeleniumIDE()
+	global.selenium.init()
 
-	@addEventListener 'DOMContentLoaded', ->
-		scopes = {};
-		for name in controllers
-			scopes[name] = angular.element(document.querySelector('[ng-controller="'+name+'"]')).scope()
+	document.addEventListener 'DOMContentLoaded', ->
+		mod = angular.module 'ng'
 
-		chrome.extension.onMessage.addListener (msg)->
-			return if msg.command isnt 'event'
-			delete msg.command
-			scopes['testCommandCtrl'].add msg
+		for elem in document.querySelectorAll('[ng-controller]')
+			name = elem.getAttribute('ng-controller')
+			mod.controller name, ['$scope', global[name]]
+			global.scopes[name] = angular.element(elem).scope()
 
+
+		global.addEventListener 'DOMContentLoaded', ->
+			chrome.extension.onMessage.addListener (msg)->
+				return if msg.command isnt 'event'
+				delete msg.command
+				global.scopes['testCommandCtrl'].add msg

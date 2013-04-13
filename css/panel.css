@@ -3,7 +3,7 @@
     padding: 0;
     border-collapse: collapse;
 }
-html, body {
+html, body, #content {
     height: 100%;
 }
 
@@ -11,7 +11,30 @@ html, body {
     border: solid thick black;
 }
 
+[ng-controller="menuPanelCtrl"] {
+    height: 20%;
+}
+
+[ng-controller="menuPanelCtrl"] li {
+    display: inline;
+}
+
+[ng-controller="testCaseCtrl"], [ng-controller="testCommandCtrl"] {
+    height: 50%;
+}
+
 [ng-controller="testCaseCtrl"] {
     float: left;
     width: 30%;
 }
+
+[ng-controller="testCommandCtrl"] {
+    float: right;
+    width: 60%;
+}
+
+[ng-controller="messagesCtrl"] {
+    clear: both;
+    height: 30%;
+}
+

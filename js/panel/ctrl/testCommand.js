@@ -2,6 +2,15 @@
 (function() {
   "use strict";  this.testCommandCtrl = function($scope) {
     $scope.testCase = new TestCase();
+    $scope.commandList = [
+      {
+        'value': 'text',
+        'text': 'text'
+      }, {
+        'value': 'click',
+        'text': 'click'
+      }
+    ];
     $scope.add = function(command) {
       $scope.testCase.unshift(command);
       return $scope.$apply();
