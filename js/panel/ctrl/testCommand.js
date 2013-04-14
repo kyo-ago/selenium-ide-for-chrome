@@ -12,8 +12,24 @@
       }
     ];
     $scope.add = function(command) {
-      $scope.testCase.unshift(command);
+      $scope.testCase.push(command);
       return $scope.$apply();
+    };
+    $scope.getTestCase = function() {
+      var cmd, cmds;
+
+      cmds = (function() {
+        var _i, _len, _ref, _results;
+
+        _ref = $scope.testCase.toArray();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          cmd = _ref[_i];
+          _results.push(cmd.attributes);
+        }
+        return _results;
+      })();
+      return cmds;
     };
     return this;
   };

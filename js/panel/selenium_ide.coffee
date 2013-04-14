@@ -6,9 +6,6 @@
 		@desiredCapabilities = param.desiredCapabilities || {}
 		@requiredCapabilities = param.requiredCapabilities || {}
 		@windowName = param.windowName || ''
-		@getSessionId().next((result) =>
-			@ajax.set('sessionId', result.sessionId)
-		).next(@setWindowName.bind(@)).next(@setUrl.bind(@))
 
 		@
 
@@ -18,22 +15,65 @@
 			'requiredCapabilities' : @requiredCapabilities
 		})
 
-	setWindowName : (name = @windowName) ->
+	setWindowName : (name) ->
 		return if not name
 		@ajax.post('/session/:sessionId/window', {
 			'name' : name
 		})
 
-	setUrl : (url) ->
+	setURL : (url) ->
+		return if not url
 		@ajax.post('/session/:sessionId/url', {
-			'url' : 'http://frtrt.net/'
+			'url' : url
 		})
 
-	send : () ->
-#		param = @scopes.testCommandCtrl.getTestCase()
+	send : (param) ->
+		@getSessionId()
+			.next((data) =>
+				@ajax.set('sessionId', data.sessionId)
+			).next(@setWindowName.bind(@, @windowName))
+			.next(@setURL.bind(@, param.baseURL))
+			.next(@executeText.bind(@, param.tests))
+
+	getElementId : () ->
+
+
+	executeText : (tests) ->
+		Deferred.loop(tests.length, (i) =>
+			test = new SeleniumTest @ajax
+			test.execute tests[i]
+		)
 
 	quit : ->
 		@ajax.delete('/session/:sessionId')
+
+class SeleniumTest
+	constructor : (@ajax) ->
+
+	execute : (test) ->
+		@getElementId(test.selector).next(@executeTarget.bind(@, test))
+
+	getElementId : (selector) ->
+		@ajax.post '/session/:sessionId/element', {
+			'using' : 'css selector'
+			'value' : selector
+		}
+
+	executeTarget : (test, data) ->
+		id = data.value.ELEMENT
+		if test.name is 'click'
+			@clickElement(id)
+		else
+			@textElement(id, test.value)
+
+	clickElement : (elementId) ->
+		@ajax.post "/session/:sessionId/element/#{ elementId }/click"
+
+	textElement : (elementId, value) ->
+		@ajax.post "/session/:sessionId/element/#{ elementId }/value", {
+			'value' : value.split(/(?:)/)
+		}
+
 
 class SeleniumAjax
 	constructor : (@server, @param = {}) ->

@@ -13,7 +13,19 @@
       });
     });
     $scope.executeTestCase = function() {
-      return selenium.send();
+      var tests;
+
+      tests = scopes['testCommandCtrl'].getTestCase();
+      if (!tests.length) {
+        return;
+      }
+      if (!$scope.baseURL) {
+        return;
+      }
+      return selenium.send({
+        'baseURL': $scope.baseURL,
+        'tests': tests
+      });
     };
     $scope.quitBrowser = function() {
       return selenium.quit();

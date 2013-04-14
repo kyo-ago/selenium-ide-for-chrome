@@ -11,6 +11,7 @@ getSelector = (elem, selector = '')->
 	getSelector parent, selector
 
 sendMessage = (param) ->
+	message = {}
 	for key, val of param
 		message[key] = val
 	message['command'] = 'event'

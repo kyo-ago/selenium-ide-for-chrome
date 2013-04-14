@@ -4,6 +4,9 @@ do =>
 	global = @
 	global.scopes = {};
 
+	Deferred.onerror = ->
+		console.debug(arguments)
+
 	global.selenium = new SeleniumIDE()
 	global.selenium.init()
 

@@ -14,7 +14,11 @@
 	]
 
 	$scope.add = (command) ->
-		$scope.testCase.unshift command
+		$scope.testCase.push command
 		$scope.$apply()
+
+	$scope.getTestCase = ->
+		cmds = for cmd in $scope.testCase.toArray() then cmd.attributes
+		cmds
 
 	@

@@ -29,8 +29,9 @@
   };
 
   sendMessage = function(param) {
-    var key, val;
+    var key, message, val;
 
+    message = {};
     for (key in param) {
       val = param[key];
       message[key] = val;

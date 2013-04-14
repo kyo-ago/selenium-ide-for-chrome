@@ -8,6 +8,9 @@
 
     global = _this;
     global.scopes = {};
+    Deferred.onerror = function() {
+      return console.debug(arguments);
+    };
     global.selenium = new SeleniumIDE();
     global.selenium.init();
     return document.addEventListener('DOMContentLoaded', function() {
