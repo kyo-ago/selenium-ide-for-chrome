@@ -6,7 +6,7 @@
       'windowType': 'normal'
     }, function(tabs) {
       return chrome.tabs.executeScript(tabs[0].id, {
-        'code': 'location.origin'
+        'code': 'location.href'
       }, function(results) {
         $scope.baseURL = results[0];
         return $scope.$apply();
