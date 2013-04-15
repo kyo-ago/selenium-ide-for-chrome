@@ -12,12 +12,33 @@ html, body, #content {
 }
 
 [ng-controller="menuPanelCtrl"] {
-    height: 20%;
+    height: 3em;
 }
 
 [ng-controller="menuPanelCtrl"] li {
     display: inline;
 }
+
+[ng-controller="menuPanelCtrl"] .speedLine {
+    position: relative;
+}
+
+[ng-controller="menuPanelCtrl"] [for="operationSpeed"] {
+    position: absolute;
+    width: 80px;
+    top: -1em;
+    font-size: 0.7em;
+}
+
+[ng-controller="menuPanelCtrl"] [for="operationSpeed"] :nth-child(2) {
+    position: absolute;
+    right: 0;
+}
+
+[ng-controller="menuPanelCtrl"] #operationSpeed {
+    width: 80px;
+}
+
 
 [ng-controller="testCaseCtrl"], [ng-controller="testCommandCtrl"] {
     height: 50%;

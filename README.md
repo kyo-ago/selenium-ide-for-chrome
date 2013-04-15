@@ -13,3 +13,6 @@ https://github.com/kyo-ago/selenium-ide-for-chrome/blob/860b2d4bf93cefacfb2b9983
 
 DevToolsとの連携（条件付きブレークポイント等）
 コードカバレッジとの連携
+
+https://code.google.com/p/selenium/source/browse/COPYING
+	https://selenium.googlecode.com/git/ide/main/src/skin/classic/icons.png

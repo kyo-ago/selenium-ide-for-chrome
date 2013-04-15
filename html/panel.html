@@ -32,13 +32,14 @@
 <div id="content">
 
     <div ng-controller="menuPanelCtrl">
+        <label for="baseURL">Base URL</label><input type="text" id="baseURL" ng-model="baseURL">
         <ul>
-            <li><label for="baseURL">Base URL</label><input type="text" id="baseURL" ng-model="baseURL"></li>
-            <li><label for="operationSpeed">speed</label><input type="range" id="operationSpeed" min="1" max="5" value="1"></li>
-            <li><button id="executeTestCase" ng-click="executeTestCase()">execute test case</button></li>
-            <li><button id="executeTestCommand">execute test command</button></li>
-            <li><button id="quitBrowser" ng-click="quitBrowser()">quit browser</button></li>
-            <li><label for="recordingOperation">recording</label><input type="checkbox" id="recordingOperation"></li>
+            <li class="speedLine"><label for="operationSpeed"><span>fast</span><span>slow</span></label><input type="range" id="operationSpeed" value="0"></li>
+            <li><button id="executeTestCase" ng-click="executeTestCase()"><img src="/img/panel/play_all.png"></button></li>
+            <li><button id="executeTestCommand"><img src="/img/panel/play_current.png"></button></li>
+            <li><button id="stopTest"><img src="/img/panel/stop.png"></button></li>
+            <li><button id="operationRecording"><img src="/img/panel/rec_stop.png"></button></li>
+            <li><button id="quitBrowser" ng-click="quitBrowser()">quit</button></li>
         </ul>
     </div><!-- #menuPanelCtrl -->
 
