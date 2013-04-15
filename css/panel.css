@@ -2,21 +2,38 @@
     margin: 0;
     padding: 0;
     border-collapse: collapse;
+    font-size: 0.95em;
 }
-html, body, #content {
+html, body, #content, .wrap {
     height: 100%;
 }
-
-[ng-controller] {
-    border: solid thick black;
+.selected {
+    background-color: highlight;
+    color: highlighttext;
 }
+
 
 [ng-controller="menuPanelCtrl"] {
     height: 3em;
+    padding: 5px 0 10px 2px
+}
+
+[ng-controller="menuPanelCtrl"] hr {
+    margin: 3px;
+
+}
+
+[ng-controller="menuPanelCtrl"] ul {
+    position: relative;
 }
 
 [ng-controller="menuPanelCtrl"] li {
     display: inline;
+}
+
+[ng-controller="menuPanelCtrl"] li:last-child {
+    position: absolute;
+    right: 0;
 }
 
 [ng-controller="menuPanelCtrl"] .speedLine {
@@ -30,13 +47,15 @@ html, body, #content {
     font-size: 0.7em;
 }
 
-[ng-controller="menuPanelCtrl"] [for="operationSpeed"] :nth-child(2) {
+[ng-controller="menuPanelCtrl"] [for="operationSpeed"] span:nth-child(2) {
     position: absolute;
-    right: 0;
+    right: 3px;
 }
 
 [ng-controller="menuPanelCtrl"] #operationSpeed {
     width: 80px;
+    position: relative;
+    top: 2px;
 }
 
 
@@ -49,10 +68,59 @@ html, body, #content {
     width: 30%;
 }
 
+
 [ng-controller="testCommandCtrl"] {
+    overflow-x: auto;
     float: right;
-    width: 60%;
+    width: 70%;
 }
+
+[ng-controller="testCommandCtrl"] .commandsWrap {
+    overflow-x: hidden;
+    height: 70%;
+}
+
+[ng-controller="testCommandCtrl"] .commands {
+    white-space: nowrap;
+    width: 100%;
+    display: block;
+}
+
+[ng-controller="testCommandCtrl"] .commands tbody {
+    display: block;
+}
+
+[ng-controller="testCommandCtrl"] .commands tr {
+    vertical-align: top;
+    display: block;
+    border: solid 1px black;
+    margin: -2px 0;
+}
+
+[ng-controller="testCommandCtrl"] .commands th {
+    height: 1em;
+}
+
+[ng-controller="testCommandCtrl"] .commands tr > * {
+    width: 56%;
+    overflow: hidden;
+    display: inline-block;
+    margin: 0 -2px;
+    padding: 0 3px;
+}
+
+[ng-controller="testCommandCtrl"] .commands tr > *:first-child {
+    width: 22%;
+}
+
+[ng-controller="testCommandCtrl"] .commands tr > *:last-child {
+    width: 22%;
+}
+
+[ng-controller="testCommandCtrl"] .commands tr > td {
+    border: solid 1px black;
+}
+
 
 [ng-controller="messagesCtrl"] {
     clear: both;

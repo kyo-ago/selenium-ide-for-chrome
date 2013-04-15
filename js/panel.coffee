@@ -24,3 +24,8 @@ do =>
 				return if msg.command isnt 'event'
 				delete msg.command
 				global.scopes['testCommandCtrl'].add msg
+
+		global.addEventListener 'click', (event) ->
+			for key, val of global.scopes
+				val.$emit event.type, event
+		, true

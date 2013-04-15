@@ -32,33 +32,63 @@
 <div id="content">
 
     <div ng-controller="menuPanelCtrl">
-        <label for="baseURL">Base URL</label><input type="text" id="baseURL" ng-model="baseURL">
-        <ul>
-            <li class="speedLine"><label for="operationSpeed"><span>fast</span><span>slow</span></label><input type="range" id="operationSpeed" value="0"></li>
-            <li><button id="executeTestCase" ng-click="executeTestCase()"><img src="/img/panel/play_all.png"></button></li>
-            <li><button id="executeTestCommand"><img src="/img/panel/play_current.png"></button></li>
-            <li><button id="stopTest"><img src="/img/panel/stop.png"></button></li>
-            <li><button id="operationRecording"><img src="/img/panel/rec_stop.png"></button></li>
-            <li><button id="quitBrowser" ng-click="quitBrowser()">quit</button></li>
-        </ul>
+        <div class="wrap">
+            <label for="baseURL">Base URL</label><input type="text" id="baseURL" ng-model="baseURL">
+            <button id="quitBrowser" ng-click="quitBrowser()">quit</button>
+            <hr>
+            <ul>
+                <li class="speedLine"><label for="operationSpeed"><span>fast</span><span>slow</span></label><input type="range" id="operationSpeed" value="0"></li>
+                <li><button id="executeTestCase" ng-click="executeTestCase()"><img src="/img/panel/play_all.png"></button></li>
+                <li><button id="executeTestCommand"><img src="/img/panel/play_current.png"></button></li>
+                <li><button id="stopTest"><img src="/img/panel/stop.png"></button></li>
+                <li><button id="operationRecording"><img src="/img/panel/rec_stop.png"></button></li>
+            </ul>
+        </div>
     </div><!-- #menuPanelCtrl -->
 
     <div ng-controller="testCaseCtrl">
-        testCaseCtrl
+        <div class="wrap">
+            testCaseCtrl
+        </div>
     </div><!-- #testCaseCtrl -->
 
     <div ng-controller="testCommandCtrl">
-        <table>
-            <tr ng-repeat="command in testCase.toArray()">
-                <td><select ng-model="command.attributes.name" ng-options="obj.value as obj.text for obj in commandList"></select></td>
-                <td><input type="text" ng-model="command.attributes.selector"></td>
-                <td><input type="text" ng-model="command.attributes.value"></td>
-            </tr>
-        </table>
+        <div class="wrap">
+            <div class="commandsWrap">
+                <table class="commands">
+                    <tr>
+                        <th>Command</th>
+                        <th>Target</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr ng-repeat="command in testCase.models" ng-click="selectLine(command)" ng-class="{selected: command.get('selected')}">
+                        <td>{{ command.attributes.name }}</td>
+                        <td>{{ command.attributes.selector }}</td>
+                        <td>{{ command.attributes.value }}</td>
+                    </tr>
+                </table>
+            </div>
+            <table>
+                <tr>
+                    <td>Command</td>
+                    <td><select ng-model="selectedCommand.attributes.name" ng-options="obj.value as obj.text for obj in commandList"></select></td>
+                </tr>
+                <tr>
+                    <td>Target</td>
+                    <td><input type="text" ng-model="selectedCommand.attributes.selector"><button>Search</button></td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td><input type="text" ng-model="selectedCommand.attributes.value"></td>
+                </tr>
+            </table>
+        </div>
     </div><!-- #testCommandCtrl -->
 
     <div ng-controller="messagesCtrl">
-        messagesCtrl
+        <div class="wrap">
+            messagesCtrl
+        </div>
     </div><!-- #messagesCtrl -->
 
 </div><!-- #content -->

@@ -2,6 +2,73 @@
 (function() {
   "use strict";  this.testCommandCtrl = function($scope) {
     $scope.testCase = new TestCase();
+    $scope.testCase.add([
+      {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }, {
+        'name': 'text',
+        'value': 'value',
+        'selector': 'selector'
+      }
+    ]);
     $scope.commandList = [
       {
         'value': 'text',
@@ -11,9 +78,27 @@
         'text': 'click'
       }
     ];
+    $scope.selectedCommand = void 0;
     $scope.add = function(command) {
+      var wrap;
+
       $scope.testCase.push(command);
-      return $scope.$apply();
+      $scope.$apply();
+      wrap = document.querySelector('[ng-controller="testCommandCtrl"] .commandsWrap');
+      return wrap.scrollTop = wrap.scrollHeight;
+    };
+    $scope.selectLine = function(command) {
+      var sel, _i, _len, _ref;
+
+      _ref = $scope.testCase.where({
+        'selected': true
+      });
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        sel = _ref[_i];
+        sel.set('selected', false);
+      }
+      command.set('selected', true);
+      return $scope.selectedCommand = command;
     };
     $scope.getTestCase = function() {
       var cmd, cmds;
@@ -31,6 +116,18 @@
       })();
       return cmds;
     };
+    $scope.$on('click', function() {
+      var sel, _i, _len, _ref;
+
+      _ref = $scope.testCase.where({
+        'selected': true
+      });
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        sel = _ref[_i];
+        sel.set('selected', false);
+      }
+      return $scope.$apply();
+    });
     return this;
   };
 
