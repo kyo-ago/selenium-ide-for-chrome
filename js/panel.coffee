@@ -18,8 +18,8 @@ do =>
 			mod.controller name, ['$scope', global[name]]
 			global.scopes[name] = angular.element(elem).scope()
 
-
 		global.addEventListener 'DOMContentLoaded', ->
+			global.scopes[name]
 			chrome.extension.onMessage.addListener (msg)->
 				return if msg.command isnt 'event'
 				delete msg.command
@@ -29,3 +29,7 @@ do =>
 			for key, val of global.scopes
 				val.$emit event.type, event
 		, true
+
+		global.addEventListener 'keyup', (event) ->
+			for key, val of global.scopes
+				val.$emit event.type, event

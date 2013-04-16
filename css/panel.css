@@ -33,7 +33,23 @@ html, body, #content, .wrap {
 
 [ng-controller="menuPanelCtrl"] li:last-child {
     position: absolute;
-    right: 0;
+    right: 3px;
+}
+
+[ng-controller="menuPanelCtrl"] li:last-child input[type="checkbox"] {
+    display: none;
+}
+
+[ng-controller="menuPanelCtrl"] li:last-child input[type="checkbox"] + label img:last-child {
+    display: none;
+}
+
+[ng-controller="menuPanelCtrl"] li:last-child input[type="checkbox"]:checked + label img:first-child {
+    display: none;
+}
+
+[ng-controller="menuPanelCtrl"] li:last-child input[type="checkbox"]:checked + label img:last-child {
+    display: initial;
 }
 
 [ng-controller="menuPanelCtrl"] .speedLine {

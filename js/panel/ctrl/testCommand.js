@@ -2,73 +2,6 @@
 (function() {
   "use strict";  this.testCommandCtrl = function($scope) {
     $scope.testCase = new TestCase();
-    $scope.testCase.add([
-      {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselectorselector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }, {
-        'name': 'text',
-        'value': 'value',
-        'selector': 'selector'
-      }
-    ]);
     $scope.commandList = [
       {
         'value': 'text',
@@ -88,8 +21,9 @@
       return wrap.scrollTop = wrap.scrollHeight;
     };
     $scope.selectLine = function(command) {
-      var sel, _i, _len, _ref;
+      var sel, selected, _i, _len, _ref;
 
+      selected = command.get('selected');
       _ref = $scope.testCase.where({
         'selected': true
       });
@@ -97,7 +31,7 @@
         sel = _ref[_i];
         sel.set('selected', false);
       }
-      command.set('selected', true);
+      command.set('selected', !selected);
       return $scope.selectedCommand = command;
     };
     $scope.getTestCase = function() {
@@ -116,15 +50,50 @@
       })();
       return cmds;
     };
-    $scope.$on('click', function() {
-      var sel, _i, _len, _ref;
+    $scope.$on('click', function(arg, event) {
+      var active, elem, sel, table, _i, _len, _ref, _ref1;
 
+      table = document.querySelector('[ng-controller="testCommandCtrl"] .commands');
+      if (table === (elem = event.srcElement)) {
+        return void 0;
+      }
+      active = (_ref = document.activeElement.tagName) != null ? _ref.toLocaleLowerCase() : void 0;
+      if (active === 'input' || active === 'textarea' || active === 'select' || active === 'button') {
+        return void 0;
+      }
+      while (elem = elem.parentNode) {
+        if (table === elem) {
+          return void 0;
+        }
+      }
+      _ref1 = $scope.testCase.where({
+        'selected': true
+      });
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        sel = _ref1[_i];
+        sel.set('selected', false);
+      }
+      $scope.selectedCommand = void 0;
+      return $scope.$apply();
+    });
+    $scope.$on('keyup', function(arg, event) {
+      var idx, last, sel, _i, _len, _ref;
+
+      if (event.keyCode !== 46) {
+        return;
+      }
+      last = void 0;
       _ref = $scope.testCase.where({
         'selected': true
       });
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        sel = _ref[_i];
-        sel.set('selected', false);
+      for (idx = _i = 0, _len = _ref.length; _i < _len; idx = ++_i) {
+        sel = _ref[idx];
+        last = $scope.testCase.at($scope.testCase.indexOf(sel) + 1) || last;
+        $scope.testCase.remove(sel);
+      }
+      if (last) {
+        last.set('selected', true);
+        $scope.selectedCommand = last;
       }
       return $scope.$apply();
     });

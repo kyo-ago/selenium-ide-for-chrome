@@ -25,6 +25,7 @@
         global.scopes[name] = angular.element(elem).scope();
       }
       global.addEventListener('DOMContentLoaded', function() {
+        global.scopes[name];
         return chrome.extension.onMessage.addListener(function(msg) {
           if (msg.command !== 'event') {
             return;
@@ -33,7 +34,7 @@
           return global.scopes['testCommandCtrl'].add(msg);
         });
       });
-      return global.addEventListener('click', function(event) {
+      global.addEventListener('click', function(event) {
         var key, val, _ref1, _results;
 
         _ref1 = global.scopes;
@@ -44,6 +45,17 @@
         }
         return _results;
       }, true);
+      return global.addEventListener('keyup', function(event) {
+        var key, val, _ref1, _results;
+
+        _ref1 = global.scopes;
+        _results = [];
+        for (key in _ref1) {
+          val = _ref1[key];
+          _results.push(val.$emit(event.type, event));
+        }
+        return _results;
+      });
     });
   })();
 
