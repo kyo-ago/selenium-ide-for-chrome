@@ -2,6 +2,7 @@
 (function() {
   "use strict";  this.menuPanelCtrl = function($scope) {
     $scope.operationRecording = true;
+    $scope.operationSpeed = 0;
     $scope.executeTestCase = function() {
       var tests;
 
@@ -16,6 +17,9 @@
         'baseURL': $scope.baseURL,
         'tests': tests
       });
+    };
+    $scope.changeOperationSpeed = function() {
+      return selenium.setSpeed($scope.operationSpeed);
     };
     $scope.quitBrowser = function() {
       return selenium.quit();

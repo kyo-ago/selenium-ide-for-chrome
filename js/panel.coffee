@@ -17,12 +17,11 @@ DOMContentLoaded = (param) ->
 	global.scopes['menuPanelCtrl'].baseURL = param.LocationHref
 	global.scopes['menuPanelCtrl'].$apply()
 
-	global.addEventListener 'DOMContentLoaded', ->
-		chrome.extension.onMessage.addListener (msg)->
-			return if not global.scopes['menuPanelCtrl'].operationRecording
-			return if msg.command isnt 'event'
-			delete msg.command
-			global.scopes['testCommandCtrl'].add msg
+	chrome.extension.onMessage.addListener (msg)->
+		return if not global.scopes['menuPanelCtrl'].operationRecording
+		return if msg.command isnt 'event'
+		delete msg.command
+		global.scopes['testCommandCtrl'].add msg
 
 	global.addEventListener 'click', (event) ->
 		for key, val of global.scopes
@@ -39,7 +38,7 @@ LocationHref = (defer) ->
 		'windowType' : 'normal'
 	}, (tabs) ->
 		if tabs[0].url.match /^chrome:/
-			alert 'security error.\ndoes not run on "chrome://" page.'
+			alert 'Security Error.\ndoes not run on "chrome://" page.'
 			global.close()
 			return undefined
 		defer tabs[0].url

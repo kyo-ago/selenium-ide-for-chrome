@@ -10,11 +10,16 @@
       if (param == null) {
         param = {};
       }
+      this.speed = 0;
       this.ajax = new SeleniumAjax(param.server || 'http://localhost:9515');
       this.desiredCapabilities = param.desiredCapabilities || {};
       this.requiredCapabilities = param.requiredCapabilities || {};
       this.windowName = param.windowName || '';
       return this;
+    };
+
+    SeleniumIDE.prototype.setSpeed = function(speed) {
+      this.speed = speed;
     };
 
     SeleniumIDE.prototype.getSessionId = function() {
@@ -46,20 +51,34 @@
       var _this = this;
 
       return this.getSessionId().next(function(data) {
+        if (data.error === 'xhr.onerror') {
+          alert('Connection Error.\nPlease start the selenium server.');
+          chrome.tabs.query({
+            'active': true,
+            'windowType': 'normal'
+          }, function(tabs) {
+            return chrome.tabs.executeScript(tabs[0].id, {
+              'code': 'window.open("https://code.google.com/p/chromedriver/downloads/list")'
+            });
+          });
+          return void 0;
+        }
         return _this.ajax.set('sessionId', data.sessionId);
-      }).next(this.setWindowName.bind(this, this.windowName)).next(this.setURL.bind(this, param.baseURL)).next(this.executeText.bind(this, param.tests));
+      }).next(this.setWindowName.bind(this, this.windowName)).next(this.setURL.bind(this, param.baseURL)).next(this.executeTest.bind(this, param.tests));
     };
 
-    SeleniumIDE.prototype.getElementId = function() {};
-
-    SeleniumIDE.prototype.executeText = function(tests) {
+    SeleniumIDE.prototype.executeTest = function(tests) {
       var _this = this;
 
       return Deferred.loop(tests.length, function(i) {
         var test;
 
         test = new SeleniumTest(_this.ajax);
-        return test.execute(tests[i]);
+        test.execute(tests[i]);
+        if (!_this.speed) {
+          return void 0;
+        }
+        return Deferred.wait(_this.speed * 30);
       });
     };
 
@@ -142,6 +161,11 @@
           return;
         }
         return defer.call(JSON.parse(xhr.responseText));
+      };
+      xhr.onerror = function() {
+        return defer.call({
+          'error': 'xhr.onerror'
+        });
       };
       xhr.open(param.method, this.server + param.url);
       xhr.send(param.data);

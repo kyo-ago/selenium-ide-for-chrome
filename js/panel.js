@@ -27,17 +27,15 @@
     }
     global.scopes['menuPanelCtrl'].baseURL = param.LocationHref;
     global.scopes['menuPanelCtrl'].$apply();
-    global.addEventListener('DOMContentLoaded', function() {
-      return chrome.extension.onMessage.addListener(function(msg) {
-        if (!global.scopes['menuPanelCtrl'].operationRecording) {
-          return;
-        }
-        if (msg.command !== 'event') {
-          return;
-        }
-        delete msg.command;
-        return global.scopes['testCommandCtrl'].add(msg);
-      });
+    chrome.extension.onMessage.addListener(function(msg) {
+      if (!global.scopes['menuPanelCtrl'].operationRecording) {
+        return;
+      }
+      if (msg.command !== 'event') {
+        return;
+      }
+      delete msg.command;
+      return global.scopes['testCommandCtrl'].add(msg);
     });
     global.addEventListener('click', function(event) {
       var key, val, _ref1, _results;
@@ -69,7 +67,7 @@
       'windowType': 'normal'
     }, function(tabs) {
       if (tabs[0].url.match(/^chrome:/)) {
-        alert('security error.\ndoes not run on "chrome://" page.');
+        alert('Security Error.\ndoes not run on "chrome://" page.');
         global.close();
         return void 0;
       }

@@ -2,12 +2,15 @@
 
 @SeleniumIDE = class SeleniumIDE
 	init : (param = {}) ->
+		@speed = 0
 		@ajax = new SeleniumAjax param.server || 'http://localhost:9515'
 		@desiredCapabilities = param.desiredCapabilities || {}
 		@requiredCapabilities = param.requiredCapabilities || {}
 		@windowName = param.windowName || ''
 
 		@
+
+	setSpeed : (@speed) ->
 
 	getSessionId : ->
 		@ajax.post('/session', {
@@ -30,18 +33,27 @@
 	send : (param) ->
 		@getSessionId()
 			.next((data) =>
+				if data.error is 'xhr.onerror'
+					alert 'Connection Error.\nPlease start the selenium server.'
+					chrome.tabs.query {
+							'active' : true
+							'windowType' : 'normal'
+						}, (tabs) ->
+							chrome.tabs.executeScript tabs[0].id, {
+								'code' : 'window.open("https://code.google.com/p/chromedriver/downloads/list")'
+							}
+					return undefined
 				@ajax.set('sessionId', data.sessionId)
 			).next(@setWindowName.bind(@, @windowName))
 			.next(@setURL.bind(@, param.baseURL))
-			.next(@executeText.bind(@, param.tests))
+			.next(@executeTest.bind(@, param.tests))
 
-	getElementId : () ->
-
-
-	executeText : (tests) ->
+	executeTest : (tests) ->
 		Deferred.loop(tests.length, (i) =>
 			test = new SeleniumTest @ajax
 			test.execute tests[i]
+			return undefined if not @speed
+			return Deferred.wait @speed * 30
 		)
 
 	quit : ->
@@ -92,6 +104,10 @@ class SeleniumAjax
 			return if xhr.readyState isnt 4
 			return if xhr.status isnt 200
 			defer.call JSON.parse xhr.responseText
+		xhr.onerror = =>
+			defer.call({
+				'error' : 'xhr.onerror'
+			})
 		xhr.open param.method, @server + param.url
 		xhr.send param.data
 		defer
