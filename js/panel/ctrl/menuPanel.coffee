@@ -1,15 +1,7 @@
 "use strict"
 
 @menuPanelCtrl = ($scope) ->
-	chrome.tabs.query {
-		'active' : true
-		'windowType' : 'normal'
-	}, (tabs) ->
-		chrome.tabs.executeScript tabs[0].id, {
-			'code' : 'location.href'
-		}, (results) ->
-			$scope.baseURL = results[0]
-			$scope.$apply()
+	$scope.operationRecording = true
 
 	$scope.executeTestCase = ->
 		tests = scopes['testCommandCtrl'].getTestCase()
