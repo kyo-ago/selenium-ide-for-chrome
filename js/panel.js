@@ -10,7 +10,10 @@
 
   global.selenium = void 0;
 
-  Deferred.onerror = function() {
+  Deferred.onerror = function(error) {
+    if ((error != null ? error.type : void 0) === 'error.call') {
+      return void 0;
+    }
     return console.debug(arguments);
   };
 

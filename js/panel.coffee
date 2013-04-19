@@ -3,7 +3,10 @@ global = @
 global.scopes = {}
 global.selenium = undefined
 
-Deferred.onerror = ->
+Deferred.onerror = (error) ->
+	if error?.type is 'error.call'
+		return undefined
+
 	console.debug(arguments)
 
 DOMContentLoaded = (param) ->

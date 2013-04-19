@@ -7,12 +7,15 @@
 		@desiredCapabilities = param.desiredCapabilities || {}
 		@requiredCapabilities = param.requiredCapabilities || {}
 		@windowName = param.windowName || ''
+		@sessionId = param.sessionId || ''
 
 		@
 
 	setSpeed : (@speed) ->
 
 	getSessionId : ->
+		if @sessionId
+			return Deferred.connect((call)=> call({'sessionId' : @sessionId}))()
 		@ajax.post('/session', {
 			'desiredCapabilities' : @desiredCapabilities
 			'requiredCapabilities' : @requiredCapabilities
@@ -20,53 +23,50 @@
 
 	setWindowName : (name) ->
 		return if not name
-		@ajax.post('/session/:sessionId/window', {
+		@ajax.post("/session/#{@sessionId}/window", {
 			'name' : name
 		})
 
 	setURL : (url) ->
 		return if not url
-		@ajax.post('/session/:sessionId/url', {
+		@ajax.post("/session/#{@sessionId}/url", {
 			'url' : url
 		})
+
+	connectionError : ->
+		alert 'Connection Error.\nPlease start the selenium server.'
+		chrome.tabs.query {
+			'active' : true
+			'windowType' : 'normal'
+		}, (tabs) ->
+			chrome.tabs.executeScript tabs[0].id, {
+				'code' : 'window.open("https://code.google.com/p/chromedriver/downloads/list")'
+			}
 
 	send : (param) ->
 		@getSessionId()
 			.next((data) =>
-				if data.error is 'xhr.onerror'
-					alert 'Connection Error.\nPlease start the selenium server.'
-					chrome.tabs.query {
-							'active' : true
-							'windowType' : 'normal'
-						}, (tabs) ->
-							chrome.tabs.executeScript tabs[0].id, {
-								'code' : 'window.open("https://code.google.com/p/chromedriver/downloads/list")'
-							}
-					return undefined
-				@ajax.set('sessionId', data.sessionId)
-			).next(@setWindowName.bind(@, @windowName))
+				@sessionId = data.sessionId
+			).error(@connectionError.bind(@))
+			.next(@setWindowName.bind(@, @windowName))
 			.next(@setURL.bind(@, param.baseURL))
 			.next(@executeTest.bind(@, param.tests))
 
 	executeTest : (tests) ->
 		Deferred.loop(tests.length, (i) =>
-			test = new SeleniumTest @ajax
-			test.execute tests[i]
+			@execute tests[i]
 			return undefined if not @speed
 			return Deferred.wait @speed * 30
 		)
 
 	quit : ->
-		@ajax.delete('/session/:sessionId')
-
-class SeleniumTest
-	constructor : (@ajax) ->
+		@ajax.delete "/session/#{@sessionId}"
 
 	execute : (test) ->
 		@getElementId(test.selector).next(@executeTarget.bind(@, test))
 
 	getElementId : (selector) ->
-		@ajax.post '/session/:sessionId/element', {
+		@ajax.post "/session/#{@sessionId}/element", {
 			'using' : 'css selector'
 			'value' : selector
 		}
@@ -79,35 +79,32 @@ class SeleniumTest
 			@textElement(id, test.value)
 
 	clickElement : (elementId) ->
-		@ajax.post "/session/:sessionId/element/#{ elementId }/click"
+		@ajax.post "/session/#{@sessionId}/element/#{ elementId }/click"
 
 	textElement : (elementId, value) ->
-		@ajax.post "/session/:sessionId/element/#{ elementId }/value", {
+		@ajax.post "/session/#{@sessionId}/element/#{ elementId }/value", {
 			'value' : value.split(/(?:)/)
 		}
 
-
 class SeleniumAjax
-	constructor : (@server, @param = {}) ->
-
-	set : (key, val) ->
-		@param[key] = val
+	constructor : (@server) ->
 
 	ajax : (param) ->
 		param.data = JSON.stringify param.data if typeof param.data isnt 'string'
-		param.url = param.url.replace /:(\w+)/g, (all, name) =>
-			@param[name]
 
 		defer = Deferred()
 		xhr = new XMLHttpRequest()
+
 		xhr.onreadystatechange = =>
 			return if xhr.readyState isnt 4
 			return if xhr.status isnt 200
 			defer.call JSON.parse xhr.responseText
+
 		xhr.onerror = =>
-			defer.call({
-				'error' : 'xhr.onerror'
-			})
+			defer.fail {
+				'type' : 'error.call'
+			}
+
 		xhr.open param.method, @server + param.url
 		xhr.send param.data
 		defer
