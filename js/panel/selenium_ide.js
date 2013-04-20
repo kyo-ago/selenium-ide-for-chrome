@@ -7,15 +7,17 @@
     function SeleniumIDE() {}
 
     SeleniumIDE.prototype.init = function(param) {
+      var _ref, _ref1, _ref2, _ref3, _ref4;
+
       if (param == null) {
         param = {};
       }
       this.speed = 0;
-      this.ajax = new SeleniumAjax(param.server || 'http://localhost:9515');
-      this.desiredCapabilities = param.desiredCapabilities || {};
-      this.requiredCapabilities = param.requiredCapabilities || {};
-      this.windowName = param.windowName || '';
-      this.sessionId = param.sessionId || '';
+      this.ajax = new SeleniumAjax((_ref = param.server) != null ? _ref : 'http://localhost:9515');
+      this.desiredCapabilities = (_ref1 = param.desiredCapabilities) != null ? _ref1 : {};
+      this.requiredCapabilities = (_ref2 = param.requiredCapabilities) != null ? _ref2 : {};
+      this.windowName = (_ref3 = param.windowName) != null ? _ref3 : '';
+      this.sessionId = (_ref4 = param.sessionId) != null ? _ref4 : '';
       return this;
     };
 
@@ -80,17 +82,21 @@
     SeleniumIDE.prototype.executeTest = function(tests) {
       var _this = this;
 
+      if (!tests) {
+        return;
+      }
       return Deferred.loop(tests.length, function(i) {
         _this.execute(tests[i]);
-        if (!_this.speed) {
-          return void 0;
-        }
         return Deferred.wait(_this.speed * 30);
       });
     };
 
     SeleniumIDE.prototype.quit = function() {
-      return this.ajax["delete"]("/session/" + this.sessionId);
+      var _this = this;
+
+      return this.ajax["delete"]("/session/" + this.sessionId).next(function() {
+        return _this.sessionId = void 0;
+      });
     };
 
     SeleniumIDE.prototype.execute = function(test) {

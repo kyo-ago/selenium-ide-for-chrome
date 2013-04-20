@@ -1,49 +1,26 @@
+"use strict"
+
 do =>
 	@expect = chai.expect
-
-	synch_test = (callback) ->
-		->
-			sandbox = @sandbox = sinon.sandbox.create()
-			try
-				result = callback.call(@)
-				sandbox.verifyAndRestore()
-				return result
-			catch e
-				sandbox.restore()
-				throw e
-				return undefined
-
-	asynch_test = (callback) ->
-		(done) ->
-			origOnError = window.onerror
-			sandbox = @sandbox = sinon.sandbox.create()
-			window.onerror = ->
-				sandbox.restore()
-				origOnError.apply(@, arguments)
-				window.onerror = origOnError
-
-			try
-				return callback.call @, (error) ->
-					sandbox.verifyAndRestore()
-					window.onerror = origOnError
-					done(error)
-			catch e
-				sandbox.restore()
-				window.onerror = origOnError
-				throw e
-				return undefined
+	mocha.globals(['setTimeout', 'setInterval', 'clearTimeout', 'clearInterval', 'XMLHttpRequest'])
+	Deferred.next = Deferred.next_default;
 
 	@mocha.sinon = {}
-	@mocha.sinon.test = (callback) ->
-		return if not callback.length
-			synch_test(callback)
-		else
-			asynch_test(callback)
+	@mocha.sinon.testBefore = (callback) ->
+		->
+			@sandbox = sinon.sandbox.create()
+			@sandbox.useFakeServer()
+			@sandbox.useFakeTimers()
+			callback.apply(@, arguments)
 
+	@mocha.sinon.testAfter = (callback) ->
+		->
+			@sandbox.verifyAndRestore()
+			callback.apply(@, arguments)
 
 	if 'undefined' isnt typeof console
 		sinon.log = ->
-			console.log.apply console, arguments
+#			console.log.apply console, arguments
 
 	Deferred.onerror = (e) ->
 		throw e

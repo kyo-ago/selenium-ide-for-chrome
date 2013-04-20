@@ -3,11 +3,11 @@
 @SeleniumIDE = class SeleniumIDE
 	init : (param = {}) ->
 		@speed = 0
-		@ajax = new SeleniumAjax param.server || 'http://localhost:9515'
-		@desiredCapabilities = param.desiredCapabilities || {}
-		@requiredCapabilities = param.requiredCapabilities || {}
-		@windowName = param.windowName || ''
-		@sessionId = param.sessionId || ''
+		@ajax = new SeleniumAjax param.server ? 'http://localhost:9515'
+		@desiredCapabilities = param.desiredCapabilities ? {}
+		@requiredCapabilities = param.requiredCapabilities ? {}
+		@windowName = param.windowName ? ''
+		@sessionId = param.sessionId ? ''
 
 		@
 
@@ -53,14 +53,16 @@
 			.next(@executeTest.bind(@, param.tests))
 
 	executeTest : (tests) ->
+		return if not tests
 		Deferred.loop(tests.length, (i) =>
 			@execute tests[i]
-			return undefined if not @speed
 			return Deferred.wait @speed * 30
 		)
 
 	quit : ->
-		@ajax.delete "/session/#{@sessionId}"
+		@ajax.delete("/session/#{@sessionId}").next(=>
+			@sessionId = undefined
+		)
 
 	execute : (test) ->
 		@getElementId(test.selector).next(@executeTarget.bind(@, test))

@@ -13,9 +13,13 @@
       if (!$scope.baseURL) {
         return;
       }
+      $scope.testExecuting = true;
       return selenium.send({
         'baseURL': $scope.baseURL,
         'tests': tests
+      }).next(function() {
+        $scope.testExecuting = false;
+        return $scope.$apply();
       });
     };
     $scope.changeOperationSpeed = function() {
