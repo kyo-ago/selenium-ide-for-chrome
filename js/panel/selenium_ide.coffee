@@ -8,18 +8,25 @@
 		@requiredCapabilities = param.requiredCapabilities ? {}
 		@windowName = param.windowName ? ''
 		@sessionId = param.sessionId ? ''
-
 		@
+
+	send : (param) ->
+		Deferred.next(@getSessionId())
+			.next(@setWindowName.bind(@, @windowName))
+			.next(@setURL.bind(@, param.baseURL))
+			.next(@executeTest.bind(@, param.tests))
 
 	setSpeed : (@speed) ->
 
 	getSessionId : ->
-		if @sessionId
-			return Deferred.connect((call)=> call({'sessionId' : @sessionId}))()
+		return if @sessionId
 		@ajax.post('/session', {
 			'desiredCapabilities' : @desiredCapabilities
 			'requiredCapabilities' : @requiredCapabilities
-		})
+		}).error(@connectionError.bind(@))
+		.next((data) =>
+			@sessionId = data.sessionId
+		)
 
 	setWindowName : (name) ->
 		return if not name
@@ -42,15 +49,6 @@
 			chrome.tabs.executeScript tabs[0].id, {
 				'code' : 'window.open("https://code.google.com/p/chromedriver/downloads/list")'
 			}
-
-	send : (param) ->
-		@getSessionId()
-			.next((data) =>
-				@sessionId = data.sessionId
-			).error(@connectionError.bind(@))
-			.next(@setWindowName.bind(@, @windowName))
-			.next(@setURL.bind(@, param.baseURL))
-			.next(@executeTest.bind(@, param.tests))
 
 	executeTest : (tests) ->
 		return if not tests

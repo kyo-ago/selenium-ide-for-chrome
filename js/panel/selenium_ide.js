@@ -21,6 +21,10 @@
       return this;
     };
 
+    SeleniumIDE.prototype.send = function(param) {
+      return Deferred.next(this.getSessionId()).next(this.setWindowName.bind(this, this.windowName)).next(this.setURL.bind(this, param.baseURL)).next(this.executeTest.bind(this, param.tests));
+    };
+
     SeleniumIDE.prototype.setSpeed = function(speed) {
       this.speed = speed;
     };
@@ -29,15 +33,13 @@
       var _this = this;
 
       if (this.sessionId) {
-        return Deferred.connect(function(call) {
-          return call({
-            'sessionId': _this.sessionId
-          });
-        })();
+        return;
       }
       return this.ajax.post('/session', {
         'desiredCapabilities': this.desiredCapabilities,
         'requiredCapabilities': this.requiredCapabilities
+      }).error(this.connectionError.bind(this)).next(function(data) {
+        return _this.sessionId = data.sessionId;
       });
     };
 
@@ -69,14 +71,6 @@
           'code': 'window.open("https://code.google.com/p/chromedriver/downloads/list")'
         });
       });
-    };
-
-    SeleniumIDE.prototype.send = function(param) {
-      var _this = this;
-
-      return this.getSessionId().next(function(data) {
-        return _this.sessionId = data.sessionId;
-      }).error(this.connectionError.bind(this)).next(this.setWindowName.bind(this, this.windowName)).next(this.setURL.bind(this, param.baseURL)).next(this.executeTest.bind(this, param.tests));
     };
 
     SeleniumIDE.prototype.executeTest = function(tests) {
