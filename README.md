@@ -3,9 +3,30 @@ selenium-ide-for-chrome
 
 Unofficial project.
 
+Usage
+=======================
+
+Download ChromeDriver https://code.google.com/p/chromedriver/downloads/list
+
+Execute chromedriver
+
+Download zip https://github.com/kyo-ago/selenium-ide-for-chrome/archive/master.zip
+
+Unzip download file
+
+Open chrome://extensions/
+
+Enable "Developer mode" checkbox
+
+Click "Load unpacketd extension..."
+
+Select unziped directory
+
 License
 =======================
 Apache 2.0 License.
+
+=======================
 
 [http://code.google.com/p/selenium/](selenium - Browser automation framework - Google Project Hosting)
 
